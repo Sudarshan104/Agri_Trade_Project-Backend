@@ -12,7 +12,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // Get products added by a specific farmer
     List<Product> findByFarmerId(Long farmerId);
 
+    long countByFarmerId(Long farmerId);
+
     // ================= CATEGORY SEARCH =================
     // Get products by category (Retailer/Admin filter)
     List<Product> findByCategory(String category);
+
+    // ================= NAME SEARCH =================
+    List<Product> findByNameContainingIgnoreCase(String name);
 }

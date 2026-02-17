@@ -21,6 +21,10 @@ public class Order {
     @JoinColumn(name = "retailer_id", nullable = false)
     private User retailer;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "delivery_agent_id")
+    private User deliveryAgent;
+
     @Column(nullable = false)
     private int quantity;
 
@@ -41,16 +45,30 @@ public class Order {
     @Column(name = "total_amount")
     private Double totalAmount;
 
+    @Column(name = "delivery_otp", length = 6)
+    private String deliveryOtp;
+
+    @Column(name = "pickup_otp", length = 6)
+    private String pickupOtp;
+
     // ✅ Default constructor required by JPA
     public Order() {
     }
 
     // ✅ Getters/Setters
+    public String getPickupOtp() {
+        return pickupOtp;
+    }
+
+    public void setPickupOtp(String pickupOtp) {
+        this.pickupOtp = pickupOtp;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {   // (optional but useful)
+    public void setId(Long id) { // (optional but useful)
         this.id = id;
     }
 
@@ -68,6 +86,14 @@ public class Order {
 
     public void setRetailer(User retailer) {
         this.retailer = retailer;
+    }
+
+    public User getDeliveryAgent() {
+        return deliveryAgent;
+    }
+
+    public void setDeliveryAgent(User deliveryAgent) {
+        this.deliveryAgent = deliveryAgent;
     }
 
     public int getQuantity() {
@@ -116,5 +142,13 @@ public class Order {
 
     public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public String getDeliveryOtp() {
+        return deliveryOtp;
+    }
+
+    public void setDeliveryOtp(String deliveryOtp) {
+        this.deliveryOtp = deliveryOtp;
     }
 }

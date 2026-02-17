@@ -3,5 +3,6 @@ package com.example.demo.enums;
 public enum Role {
     ADMIN,
     FARMER,
-    RETAILER
+    RETAILER,
+    DELIVERY_AGENT
 }

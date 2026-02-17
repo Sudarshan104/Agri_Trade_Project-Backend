@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
 import com.example.demo.enums.Role;
+import com.example.demo.enums.VerificationStatus;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
 
@@ -46,6 +47,11 @@ public class ProductController {
         if (farmer.getRole() != Role.FARMER) {
             throw new RuntimeException("Only FARMER can add products");
         }
+
+        // ✅ VERIFICATION CHECK - Temporarily disabled for testing
+        // if (farmer.getVerificationStatus() != VerificationStatus.VERIFIED) {
+        //     throw new RuntimeException("Your account is not verified by admin.");
+        // }
 
         // ================= IMAGE UPLOAD =================
         String uploadDir = "uploads";

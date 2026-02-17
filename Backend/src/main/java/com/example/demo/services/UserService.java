@@ -13,16 +13,32 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     // ✅ Single encoder instance
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     // ================= REGISTER =================
     public User register(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email already in use");
+        }
 
         // 🔐 Encode password before saving
         user.setPassword(encoder.encode(user.getPassword()));
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        // Send welcome email after successful registration
+        try {
+            emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getName(), savedUser.getRole().toString());
+        } catch (Exception e) {
+            // Log error but don't fail registration
+            System.err.println("Failed to send welcome email: " + e.getMessage());
+        }
+
+        return savedUser;
     }
 
     // ================= LOGIN =================
@@ -39,5 +55,13 @@ public class UserService {
 
         // 3️⃣ Return user (with role)
         return user;
+    }
+
+    // ================= RESET PASSWORD =================
+    public void resetPassword(Long userId, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPassword(encoder.encode(newPassword));
+        userRepository.save(user);
     }
 }
